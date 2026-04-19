@@ -604,4 +604,4 @@ Response displayed in ChatWithData.jsx with source citations
 
 ---
 
-*EmoTradeLog — Built with MERN + LangChain + RAG. Where every trade tells a story.*
+*EmoTradeLog Shubham — Built with MERN + LangChain + RAG. Where every trade tells a story.*
