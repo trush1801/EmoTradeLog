@@ -1,33 +1,35 @@
-import express from "express";
-import dotenv from "dotenv";
-import cors from "cors";
-import connectDB from "./config/db.js";
-import authRoutes from "./routes/auth.routes.js";
+import express from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import connectDB from './config/db.js';
+import authRoutes from './routes/auth.routes.js';
+import tradeRoutes from './routes/tradeRoutes.js';
 
 dotenv.config();
 
 const app = express();
 
-// middleware
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// connect DB
-connectDB();
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/trades', tradeRoutes);
 
-// test route
-app.get("/", (req, res) => {
-  res.send("API running 🚀");
+app.get('/', (req, res) => {
+  res.send('EmoTradeLog API is running...');
 });
 
-app.use("/api/auth", authRoutes);
+const PORT = process.env.PORT || 5000;
 
-const PORT = process.env.PORT || 5001;
-
-const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
-
-server.on("error", (error) => {
-  console.error("Server startup error:", error.message);
-});
+// Only start the server if MONGO_URI is set, else warn the user
+if (process.env.MONGO_URI === 'your_mongodb_connection_string_here' || !process.env.MONGO_URI) {
+  console.warn('⚠️ WARNING: MONGO_URI is not set in .env file. Please set up MongoDB Atlas and add your connection string.');
+} else {
+  connectDB().then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  });
+}
